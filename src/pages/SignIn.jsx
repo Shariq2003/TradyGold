@@ -57,8 +57,6 @@ const SignIn = () => {
         }
     };
 
-
-    // Google Login handler
     const handleGoogleSignIn = () => {
         window.location.href = `${ApiUrl}/auth/google`;
     };
@@ -68,7 +66,7 @@ const SignIn = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500 mt-10">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
             <ToastContainer
                 position="top-center"
                 autoClose={5000}
