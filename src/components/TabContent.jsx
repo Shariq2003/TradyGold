@@ -16,7 +16,7 @@ const TabContent = ({ activeTab }) => {
     };
 
     return (
-        <div className="w-3/4 p-6">
+        <div className="w-[100%] p-3">
             <h2 className="text-3xl font-semibold mb-4">{activeTab}</h2>
             <div className="bg-white p-4 rounded-lg shadow-md">{content[activeTab]}</div>
         </div>

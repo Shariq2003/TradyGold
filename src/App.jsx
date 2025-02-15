@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext"; 
+import { useSelector } from "react-redux";
 
 import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -8,7 +8,7 @@ import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 
 function App() {
-  const { isLoggedIn } = useAuth();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   return (
     <Router>
@@ -17,8 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/home" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/signin" />} />
           </Routes>
         </main>
