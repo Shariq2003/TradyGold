@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+numpy
+pandas
+scikit-learn
+tensorflow
+keras
+requests
+# gunicorn  # Needed for deployment though docker
