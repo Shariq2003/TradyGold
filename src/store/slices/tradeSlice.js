@@ -1,21 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    tradeHistory: [],
+    goldAvailable: "0",
+    portfolio: "0",
+    goldBought: "0",
+    goldSold: "0",
 };
 
 const tradeSlice = createSlice({
     name: "trade",
     initialState,
     reducers: {
-        addTrade: (state, action) => {
-            state.tradeHistory.push(action.payload);
+        updateGoldAvailable: (state, action) => {
+            state.goldAvailable = action.payload;
         },
-        clearTradeHistory: (state) => {
-            state.tradeHistory = [];
+        updatePortfolio: (state, action) => {
+            state.portfolio = action.payload;
+        },
+        updateGoldBought: (state, action) => {
+            state.goldBought = action.payload;
+        },
+        updateGoldSold: (state, action) => {
+            state.goldSold = action.payload;
         },
     },
 });
 
-export const { addTrade, clearTradeHistory } = tradeSlice.actions;
+export const { updateGoldAvailable, updatePortfolio, updateGoldBought, updateGoldSold } = tradeSlice.actions;
 export default tradeSlice.reducer;
