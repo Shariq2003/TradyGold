@@ -15,54 +15,29 @@ const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-    const ApiUrl = process.env.NODE_ENV === 'production'
-        ? 'https://agro-tech-ai-backend-teal.vercel.app'
-        : 'http://localhost:8080';
+    const ApiUrl = process.env.NODE_ENV === "production"
+        ? ""
+        : "http://localhost:5000/api";
 
     const handleSignIn = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${ApiUrl}/auth/signin`, {
-                email,
-                password,
-                rememberMe,
-            });
+            const response = await axios.post(`${ApiUrl}/auth/signin`, { email, password });
 
-            // If user needs verification, redirect
-            if (response.status === 403) {
-                navigate(`/verification?email=${email}`);
-                return;
-            }
-
-            // Otherwise, log them in
             const { token, user } = response.data;
             dispatch(login(token));
             dispatch(setUser(user));
 
             toast.success("Login successful");
-            navigate("/dashboard");
-
+            navigate("/");
         } catch (error) {
-            if (error.response) {
-                const errorMessage = error.response.data?.message || "Login failed";
-                toast.error(errorMessage);
-                if (error.response.status === 403) {
-                    navigate(`/verification?email=${email}`);
-                }
-            } else {
-                toast.error("Network error or unexpected failure.");
-            }
+            toast.error(error.response?.data?.message || "Login failed");
         }
-    };
-
-    const handleGoogleSignIn = () => {
-        window.location.href = `${ApiUrl}/auth/google`;
     };
 
     if (isAuthenticated) return <Navigate to="/dashboard" />;
@@ -81,7 +56,6 @@ const SignIn = () => {
                     <p className="text-center text-gray-600 mb-8">Log in to continue</p>
 
                     <form className="space-y-4" onSubmit={handleSignIn}>
-                        {/* Email Input */}
                         <div>
                             <label className="block text-sm font-medium text-green-600">Email</label>
                             <input
@@ -94,7 +68,6 @@ const SignIn = () => {
                             />
                         </div>
 
-                        {/* Password Input */}
                         <div>
                             <label className="block text-sm font-medium text-green-600">Password</label>
                             <div className="relative">
@@ -116,19 +89,6 @@ const SignIn = () => {
                             </div>
                         </div>
 
-                        {/* Remember Me */}
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                id="rememberMe"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                                className="mr-2 text-green-600 focus:ring-green-500"
-                            />
-                            <label htmlFor="rememberMe" className="text-sm text-green-600">Remember Me</label>
-                        </div>
-
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             className="w-full py-2 bg-gradient-to-r from-green-500 to-blue-500 hover:from-blue-500 hover:to-green-500 text-white rounded-md font-bold transition-transform transform hover:scale-105"
@@ -137,16 +97,6 @@ const SignIn = () => {
                         </button>
                     </form>
 
-                    {/* Google Sign-In */}
-                    <button
-                        onClick={handleGoogleSignIn}
-                        className="w-full mt-4 py-2 flex items-center justify-center bg-white text-gray-700 border border-gray-300 rounded-md font-bold transition-transform transform hover:scale-105"
-                    >
-                        <img src={googleIcon} alt="Google" className="w-6 h-6 mr-2" />
-                        Sign in with Google
-                    </button>
-
-                    {/* Links */}
                     <p className="text-center text-sm mt-4">
                         Don’t have an account? <Link to="/signup" className="text-green-500 hover:underline">Sign Up</Link>
                     </p>

@@ -4,7 +4,6 @@ import DashboardCard from "../components/DashboardCard";
 import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoneyBill } from "react-icons/fa";
 
 const Dashboard = () => {
-    // Mock Data with Colors
     const cardsData = [
         { title: "Current Gold Value", icon: <FaCoins />, value: "₹5,200/g", color: "bg-blue-500" },
         { title: "Gold Available", icon: <FaBalanceScale />, value: "20g (₹1,04,000)", color: "bg-green-500" },
@@ -17,15 +16,11 @@ const Dashboard = () => {
     return (
         <div className="w-full p-6">
             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
-            {/* Cards Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 {cardsData.map((card, index) => (
                     <DashboardCard key={index} title={card.title} icon={card.icon} value={card.value} color={card.color} />
                 ))}
             </div>
-
-            {/* Chart Section */}
             <GoldChart />
         </div>
     );

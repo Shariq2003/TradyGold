@@ -1,7 +1,10 @@
 import React from "react";
 import { FaHome, FaChartBar, FaShoppingCart, FaMoneyBillWave, FaUser, FaSignOutAlt } from "react-icons/fa";
+import {logout} from '../store/slices/authSlice';
+import { useDispatch } from "react-redux";
 
 const Sidebar = ({ activeTab, onTabChange }) => {
+    const dispatch = useDispatch();
     const tabs = [
         { name: "Dashboard", icon: <FaHome size={28} /> },
         { name: "Analysis", icon: <FaChartBar size={28} /> },
@@ -12,7 +15,7 @@ const Sidebar = ({ activeTab, onTabChange }) => {
 
     const handleLogout = () => {
         console.log("User logged out!");
-        // Perform logout actions here (e.g., clearing auth state)
+        dispatch(logout());
     };
 
     return (
