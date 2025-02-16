@@ -9,39 +9,46 @@ import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoney
 const Dashboard = () => {
     const dispatch = useDispatch();
     const goldData = useSelector((state) => state.gold);
+    const tradeData = useSelector((state) => state.trade);
+    const userData = useSelector((state) => state.user);
 
-    const fetchGoldPrices = async () => {
+    const fetchGoldData = async () => {
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/live-prices/");
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            const data = await response.json();
+            // Fetch Live Prices
+            const responsePrices = await fetch("http://127.0.0.1:8000/api/live-prices/");
+            if (!responsePrices.ok) throw new Error("Failed to fetch live prices");
+            const priceData = await responsePrices.json();
 
+            // Fetch Predictions (Default to 30 days)
+            const responsePredictions = await fetch("http://127.0.0.1:8000/api/predict/?num_days=30");
+            if (!responsePredictions.ok) throw new Error("Failed to fetch predictions");
+            const predictionData = await responsePredictions.json();
+
+            // Dispatch to Redux Store
             dispatch(setGoldData({
-                livePrice: data.price_gram_24k,
-                trend: [], 
-                prediction: null,
-                ...data,
+                livePrice: priceData.price_gram_24k,
+                trend: [],
+                prediction: predictionData.predictions, // Add prediction data
+                ...priceData,
             }));
         } catch (error) {
-            console.error("Error fetching gold prices:", error);
+            console.error("Error fetching gold data:", error);
         }
     };
 
     useEffect(() => {
-        fetchGoldPrices();
-        const interval = setInterval(fetchGoldPrices, 30*2*30000);
+        fetchGoldData();
+        const interval = setInterval(fetchGoldData, 30 * 2 * 30000);
         return () => clearInterval(interval);
     }, [dispatch]);
 
     const cardsData = [
         { title: "Current Gold Value", icon: <FaCoins />, value: goldData.livePrice ? `₹${goldData.livePrice}/g` : "Loading...", color: "bg-blue-500" },
-        { title: "Gold Available", icon: <FaBalanceScale />, value: "20g (₹1,04,000)", color: "bg-green-500" },
-        { title: "Portfolio (P/L)", icon: <FaChartLine />, value: "+₹5,000", color: "bg-purple-500" },
-        { title: "Gold Bought", icon: <FaShoppingCart />, value: "50g", color: "bg-yellow-500" },
-        { title: "Gold Sold", icon: <FaMoneyBill />, value: "30g", color: "bg-red-500" },
-        { title: "Wallet Balance", icon: <FaWallet />, value: "₹15,000", color: "bg-indigo-500" },
+        { title: "Gold Available", icon: <FaBalanceScale />, value: tradeData?.goldAvailable ? `${tradeData.goldAvailable}g` : "N/A", color: "bg-green-500" },
+        { title: "Portfolio (P/L)", icon: <FaChartLine />, value: tradeData?.portfolio ? `₹${tradeData.portfolio}` : "N/A", color: "bg-purple-500" },
+        { title: "Gold Bought", icon: <FaShoppingCart />, value: tradeData?.goldBought ? `₹${tradeData.goldBought}` : "N/A", color: "bg-yellow-500" },
+        { title: "Gold Sold", icon: <FaMoneyBill />, value: tradeData?.goldSold ? `₹${tradeData.goldSold}` : "N/A", color: "bg-red-500" },
+        { title: "Wallet Balance", icon: <FaWallet />, value: userData?.balance ? `₹${userData.balance}` : "N/A", color: "bg-indigo-500" },
     ];
 
     return (
@@ -59,7 +66,8 @@ const Dashboard = () => {
                 <GoldTable goldData={goldData} />
             )}
 
-            <GoldChart />
+            {/* Pass API prediction data to GoldChart */}
+            <GoldChart predictions={goldData.prediction} />
         </div>
     );
 };
