@@ -4,7 +4,7 @@ import Analysis from "../pages/Analysis";
 // Import other components when ready
 // import Buy from "../pages/Buy";
 // import Sell from "../pages/Sell";
-// import Profile from "../pages/Profile";
+import UserProfile from "../pages/UserProfile";
 
 const TabContent = ({ activeTab }) => {
     const content = {
@@ -12,7 +12,7 @@ const TabContent = ({ activeTab }) => {
         Analysis: <Analysis />,
         Buy: <div>Buy Page Content</div>,
         Sell: <div>Sell Page Content</div>,
-        Profile: <div>Profile Page Content</div>,
+        Profile: <UserProfile/>,
     };
 
     return (

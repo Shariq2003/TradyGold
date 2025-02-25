@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setGoldData } from "../store/slices/goldSlice";
-import GoldChart from "../components/GoldChart";
+import GoldChart from "../components/Charts/GoldChart";
 import DashboardCard from "../components/DashboardCard";
 import GoldTable from "../components/GoldTable";
 import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoneyBill } from "react-icons/fa";
@@ -13,6 +13,7 @@ const Dashboard = () => {
     const tradeData = useSelector((state) => state.trade);
     const userData = useSelector((state) => state.user);
     const [days,setDays] = useState(7);
+    const [preictionDays,setPreictionDays] = useState(7);
 
     const fetchGoldData = async () => {
         try {
@@ -31,15 +32,15 @@ const Dashboard = () => {
             const priceTrends = await responsTrends.json();
             console.log(priceTrends);
 
-            const responsePredictions = await fetch(`http://127.0.0.1:8000/api/predict/?num_days=${days}`);
+            const responsePredictions = await fetch(`http://127.0.0.1:8000/api/predict/?num_days=${preictionDays}`);
             if (!responsePredictions.ok) throw new Error("Failed to fetch predictions");
             const predictionData = await responsePredictions.json();
             console.log(predictionData);
 
             dispatch(setGoldData({
                 livePrice: priceData.price_gram_24k ? priceData.price_gram_24k : 0,
-                trend: priceTrends ? priceTrends : [],
-                prediction: predictionData.predictions ? predictionData.predictions : {},
+                trend: priceTrends ? priceTrends : {},
+                prediction: predictionData ? predictionData : {},
                 ...priceData,
             }));
         } catch (error) {
@@ -51,7 +52,7 @@ const Dashboard = () => {
         fetchGoldData();
         const interval = setInterval(fetchGoldData, 30 * 2 * 30000);
         return () => clearInterval(interval);
-    }, [dispatch,days]);
+    }, [dispatch,days,preictionDays]);
 
     const cardsData = [
         { title: "Current Gold Value", icon: <FaCoins />, value: goldData.livePrice ? `₹${goldData.livePrice}/g` : "Loading...", color: "bg-blue-500" },
@@ -77,7 +78,8 @@ const Dashboard = () => {
                 <GoldTable goldData={goldData} />
             )}
 
-            <GoldChart data={goldData.trend} days={days} setDays={setDays}/>
+            <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend"/>
+            <GoldChart data={goldData.prediction} days={preictionDays} setDays={setPreictionDays} heading="Gold Price Prediction"/>
         </div>
     );
 };

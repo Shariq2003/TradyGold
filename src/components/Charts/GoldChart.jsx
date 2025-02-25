@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GoldChart = ({ data, days, setDays }) => {
+const GoldChart = ({ data, days, setDays,heading }) => {
 
     const predictionEntries = Object.entries(data || {}).slice(0, days);
     const labels = predictionEntries.map(([date]) => date);
@@ -26,7 +26,7 @@ const GoldChart = ({ data, days, setDays }) => {
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Gold Price Trend</h2>
+                <h2 className="text-xl font-semibold">{heading}</h2>
                 <select
                     className="border p-2 rounded"
                     value={days}

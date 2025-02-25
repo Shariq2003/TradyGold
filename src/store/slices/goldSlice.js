@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     livePrice: 0,
-    trend: [],
-    prediction: null,
+    trend: {},
+    prediction: {},
 };
 
 const goldSlice = createSlice({
