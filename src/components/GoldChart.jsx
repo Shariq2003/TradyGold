@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GoldChart = ({ predictions }) => {
-    const [days, setDays] = useState(7);
+const GoldChart = ({ data, days, setDays }) => {
 
-    // Convert API predictions to an array format for Chart.js
-    const predictionEntries = Object.entries(predictions || {}).slice(0, days);
+    const predictionEntries = Object.entries(data || {}).slice(0, days);
     const labels = predictionEntries.map(([date]) => date);
     const values = predictionEntries.map(([, price]) => price);
 
