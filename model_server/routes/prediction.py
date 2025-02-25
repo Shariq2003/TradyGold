@@ -9,4 +9,5 @@ def get_gold_prediction(num_days: int):
         raise HTTPException(status_code=400, detail="Number of days must be between 1 and 365")
     
     predictions = predict_gold_prices(num_days)
-    return {"predictions": predictions}
+    formatted_response = {date: price for date, price in predictions.items()}
+    return formatted_response

@@ -1,7 +1,8 @@
 # Backend Setup
 
 - Install dependencies by requirements.txt file.
-    ``` pip install -r requirements.txt
+    ``` 
+    pip install -r requirements.txt
     ```
 
 - Start the backend : 
