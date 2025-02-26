@@ -4,9 +4,9 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GoldChart = ({ data, days, setDays,heading }) => {
+const GoldChart = ({ data, days, setDays, heading }) => {
 
-    const predictionEntries = Object.entries(data || {}).slice(0, days);
+    const predictionEntries = heading === "Gold Price Trend" ? Object.entries(data || {}).slice(0, days).reverse() : Object.entries(data || {}).slice(0, days); 
     const labels = predictionEntries.map(([date]) => date);
     const values = predictionEntries.map(([, price]) => price);
 

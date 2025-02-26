@@ -38,7 +38,7 @@ const Dashboard = () => {
             console.log(predictionData);
 
             dispatch(setGoldData({
-                livePrice: priceData.price_gram_24k ? priceData.price_gram_24k : 0,
+                livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : 0.0000,
                 trend: priceTrends ? priceTrends : {},
                 prediction: predictionData ? predictionData : {},
                 ...priceData,
