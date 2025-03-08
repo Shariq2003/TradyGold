@@ -55,17 +55,16 @@ const Dashboard = () => {
     }, [dispatch,days,preictionDays]);
 
     const cardsData = [
-        { title: "Current Gold Value", icon: <FaCoins />, value: goldData.livePrice ? `₹${goldData.livePrice}/g` : "Loading...", color: "bg-blue-500" },
-        { title: "Gold Available", icon: <FaBalanceScale />, value: tradeData?.goldAvailable ? `${tradeData.goldAvailable}g` : "N/A", color: "bg-green-500" },
-        { title: "Portfolio (P/L)", icon: <FaChartLine />, value: tradeData?.portfolio ? `₹${tradeData.portfolio}` : "N/A", color: "bg-purple-500" },
-        { title: "Gold Bought", icon: <FaShoppingCart />, value: tradeData?.goldBought ? `₹${tradeData.goldBought}` : "N/A", color: "bg-yellow-500" },
-        { title: "Gold Sold", icon: <FaMoneyBill />, value: tradeData?.goldSold ? `₹${tradeData.goldSold}` : "N/A", color: "bg-red-500" },
-        { title: "Wallet Balance", icon: <FaWallet />, value: userData?.balance ? `₹${userData.balance}` : "N/A", color: "bg-indigo-500" },
+        { title: "Current Gold Value", icon: <FaCoins className="text-yellow-400" />, value: goldData.livePrice ? `₹${goldData.livePrice}/g` : "Loading...", color: "bg-gray-800 border border-yellow-500 shadow-lg" },
+        { title: "Gold Available", icon: <FaBalanceScale className="text-green-400" />, value: tradeData?.goldAvailable ? `${tradeData.goldAvailable}g` : "N/A", color: "bg-gray-800 border border-green-500 shadow-lg" },
+        { title: "Portfolio (P/L)", icon: <FaChartLine className="text-purple-400" />, value: tradeData?.portfolio ? `₹${tradeData.portfolio}` : "N/A", color: "bg-gray-800 border border-purple-500 shadow-lg" },
+        { title: "Gold Bought", icon: <FaShoppingCart className="text-yellow-400" />, value: tradeData?.goldBought ? `₹${tradeData.goldBought}` : "N/A", color: "bg-gray-800 border border-yellow-500 shadow-lg" },
+        { title: "Gold Sold", icon: <FaMoneyBill className="text-red-400" />, value: tradeData?.goldSold ? `₹${tradeData.goldSold}` : "N/A", color: "bg-gray-800 border border-red-500 shadow-lg" },
+        { title: "Wallet Balance", icon: <FaWallet className="text-blue-400" />, value: userData?.balance ? `₹${userData.balance}` : "N/A", color: "bg-gray-800 border border-blue-500 shadow-lg" },
     ];
 
     return (
-        <div className="w-full p-6 space-y-6">
-            {/* <h1 className="text-2xl font-bold mb-4">Dashboard</h1> */}
+        <div className="w-full p-6 space-y-6 bg-gray-900 text-gray-200 min-h-screen">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 {cardsData.map((card, index) => (
                     <DashboardCard key={index} title={card.title} icon={card.icon} value={card.value} color={card.color} />
