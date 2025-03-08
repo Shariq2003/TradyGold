@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setGoldData } from "../store/slices/goldSlice";
 import GoldChart from "../components/Charts/GoldChart";
 import DashboardCard from "../components/DashboardCard";
-import GoldTable from "../components/GoldTable";
+import GoldTable from "../components/Tables/GoldTable";
 import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoneyBill } from "react-icons/fa";
 import { getDateBeforeXDays, getDaysDifference } from "../utils/days";
 

@@ -7,7 +7,7 @@ const Home = () => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
 
     return (
-        <div className="flex bg-gray-100">
+        <div className="flex bg-gray-700">
             <Sidebar tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
             <div className="pt-8 px-28 flex-grow overflow-auto h-screen">
                 <TabContent activeTab={activeTab} />

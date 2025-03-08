@@ -5,8 +5,10 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const GoldChart = ({ data, days, setDays, heading }) => {
+    const predictionEntries = heading === "Gold Price Trend"
+        ? Object.entries(data || {}).slice(0, days).reverse()
+        : Object.entries(data || {}).slice(0, days);
 
-    const predictionEntries = heading === "Gold Price Trend" ? Object.entries(data || {}).slice(0, days).reverse() : Object.entries(data || {}).slice(0, days); 
     const labels = predictionEntries.map(([date]) => date);
     const values = predictionEntries.map(([, price]) => price);
 
@@ -16,19 +18,39 @@ const GoldChart = ({ data, days, setDays, heading }) => {
             {
                 label: "Gold Price",
                 data: values,
-                borderColor: "gold",
-                backgroundColor: "rgba(255, 215, 0, 0.5)",
+                borderColor: "#FFD700",
+                backgroundColor: "rgba(255, 215, 0, 0.3)",
                 tension: 0.3,
             },
         ],
     };
 
+    const chartOptions = {
+        plugins: {
+            legend: {
+                labels: {
+                    color: "#fff", // White legend text
+                },
+            },
+        },
+        scales: {
+            x: {
+                ticks: { color: "#fff" }, // White X-axis labels
+                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Light grid lines
+            },
+            y: {
+                ticks: { color: "#fff" }, // White Y-axis labels
+                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Light grid lines
+            },
+        },
+    };
+
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 rounded-lg shadow-md bg-gray-900 text-white">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">{heading}</h2>
                 <select
-                    className="border p-2 rounded"
+                    className="border p-2 rounded bg-gray-800 text-white"
                     value={days}
                     onChange={(e) => setDays(Number(e.target.value))}
                 >
@@ -39,7 +61,7 @@ const GoldChart = ({ data, days, setDays, heading }) => {
                     <option value={90}>Last 90 Days</option>
                 </select>
             </div>
-            <Line data={chartData} />
+            <Line data={chartData} options={chartOptions} />
         </div>
     );
 };

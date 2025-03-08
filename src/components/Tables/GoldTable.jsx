@@ -2,7 +2,7 @@ import React from "react";
 
 const GoldTable = ({ goldData }) => {
     if (!goldData) {
-        return <p className="text-center text-gray-500">No data available</p>;
+        return <p className="text-center text-gray-400">No data available</p>;
     }
 
     const goldPrices = [
@@ -17,22 +17,22 @@ const GoldTable = ({ goldData }) => {
     ];
 
     return (
-        <div className="w-full mx-auto p-4 bg-white shadow-md rounded-lg">
+        <div className="w-full mx-auto p-4 bg-gray-900 text-white shadow-md rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-center">
                 Live Gold Prices - {new Date().toLocaleDateString()}
             </h2>
-            <table className="w-full border-collapse border border-gray-300">
-                <thead className="bg-gray-100">
+            <table className="w-full border-collapse border border-gray-700">
+                <thead className="bg-gray-800">
                     <tr>
-                        <th className="p-3 text-left border">Carat</th>
-                        <th className="p-3 text-left border">Price (₹ per gram)</th>
+                        <th className="p-3 text-left border border-gray-700">Carat</th>
+                        <th className="p-3 text-left border border-gray-700">Price (₹ per gram)</th>
                     </tr>
                 </thead>
                 <tbody>
                     {goldPrices.map((gold, index) => (
-                        <tr key={index} className="border-t hover:bg-gray-50">
-                            <td className="p-3 border">{gold.carat}</td>
-                            <td className="p-3 border">₹ {gold.price.toFixed(2)}</td>
+                        <tr key={index} className="border-t border-gray-700 hover:bg-gray-800">
+                            <td className="p-3 border border-gray-700">{gold.carat}</td>
+                            <td className="p-3 border border-gray-700">₹ {gold.price.toFixed(2)}</td>
                         </tr>
                     ))}
                 </tbody>
