@@ -18,19 +18,24 @@ const Dashboard = () => {
     const [trendLoading, setTrendLoading] = useState(true);
     const [predictionsLoading, setPredictionsLoading] = useState(true);
     const [livePriceLoading, setLivePriceLoading] = useState(true);
+    const [goldTableData, setGoldTableData] = useState({});
 
     const fetchLivePrices = async () => {
         setLivePriceLoading(true);
+        toast.loading("Fetching live gold prices...", { id: "live-price" });
+
         try {
             const response = await fetch("http://127.0.0.1:8000/api/live-prices/");
-            if (response.ok) {
-                const priceData = await response.json();
-                dispatch(setGoldData({ ...goldData, livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : 0.0000 }));
-            } else {
-                console.error("Failed to fetch live prices");
-            }
+            if (!response.ok) throw new Error("Failed to fetch live prices");
+
+            const priceData = await response.json();
+            dispatch(setGoldData({ livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : "0.0000" }));
+            setGoldTableData(priceData);
+
+            toast.success("Live prices updated!", { id: "live-price" });
         } catch (error) {
             console.error("Error fetching live prices:", error);
+            toast.error("Failed to fetch live prices", { id: "live-price" });
         } finally {
             setLivePriceLoading(false);
         }
@@ -42,12 +47,10 @@ const Dashboard = () => {
             const startDate = getDateBeforeXDays(days);
             const endDate = new Date().toISOString().split("T")[0];
             const response = await fetch(`http://127.0.0.1:8000/api/gold-prices/?start_date=${startDate}&end_date=${endDate}`);
-            if (response.ok) {
-                const priceTrends = await response.json();
-                dispatch(setGoldData({ ...goldData, trend: priceTrends || {} }));
-            } else {
-                console.error("Failed to fetch price trends");
-            }
+            if (!response.ok) throw new Error("Failed to fetch price trends");
+
+            const priceTrends = await response.json();
+            dispatch(setGoldData({ trend: priceTrends || {} }));
         } catch (error) {
             console.error("Error fetching price trends:", error);
         } finally {
@@ -59,12 +62,10 @@ const Dashboard = () => {
         setPredictionsLoading(true);
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/predict/?num_days=${predictionDays}`);
-            if (response.ok) {
-                const predictionData = await response.json();
-                dispatch(setGoldData({ ...goldData, prediction: predictionData || {} }));
-            } else {
-                console.error("Failed to fetch predictions");
-            }
+            if (!response.ok) throw new Error("Failed to fetch predictions");
+
+            const predictionData = await response.json();
+            dispatch(setGoldData({ prediction: predictionData || {} }));
         } catch (error) {
             console.error("Error fetching predictions:", error);
         } finally {
@@ -73,22 +74,18 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        toast.loading("Fetching gold data...", { id: "gold-data" });
-
         fetchLivePrices();
-        fetchPriceTrends();
-        fetchPredictions();
-
-        toast.success("Gold data updated!", { id: "gold-data" });
-
-        const interval = setInterval(() => {
-            fetchLivePrices();
-            fetchPriceTrends();
-            fetchPredictions();
-        }, 30 * 2 * 30000);
-
+        const interval = setInterval(fetchLivePrices, 30 * 60 * 1000);
         return () => clearInterval(interval);
-    }, [dispatch, days, predictionDays]);
+    }, []);
+
+    useEffect(() => {
+        fetchPriceTrends();
+    }, [days]);
+
+    useEffect(() => {
+        fetchPredictions();
+    }, [predictionDays]);
 
     const cardsData = [
         { title: "Current Gold Value", icon: <FaCoins className="text-yellow-400" />, value: livePriceLoading ? "Loading..." : `₹${goldData.livePrice}/g`, color: "bg-gray-800 border border-yellow-500 shadow-lg" },
@@ -109,7 +106,7 @@ const Dashboard = () => {
             {livePriceLoading ? (
                 <p className="text-center text-gray-400">Loading live gold prices...</p>
             ) : (
-                <GoldTable goldData={goldData} />
+                <GoldTable goldData={goldTableData} />
             )}
             <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend" loading={trendLoading} />
             <GoldChart data={goldData.prediction} days={predictionDays} setDays={setPredictionDays} heading="Gold Price Prediction" loading={predictionsLoading} />
