@@ -1,7 +1,7 @@
 import React from "react";
 
 const GoldTable = ({ goldData }) => {
-    if (!goldData) {
+    if (!goldData || Object.keys(goldData).length === 0) {
         return <p className="text-center text-gray-400">No data available</p>;
     }
 
@@ -32,7 +32,9 @@ const GoldTable = ({ goldData }) => {
                     {goldPrices.map((gold, index) => (
                         <tr key={index} className="border-t border-gray-700 hover:bg-gray-800">
                             <td className="p-3 border border-gray-700">{gold.carat}</td>
-                            <td className="p-3 border border-gray-700">₹ {gold.price.toFixed(2)}</td>
+                            <td className="p-3 border border-gray-700">
+                                {gold.price !== undefined ? `₹ ${gold.price.toFixed(2)}` : "N/A"}
+                            </td>
                         </tr>
                     ))}
                 </tbody>

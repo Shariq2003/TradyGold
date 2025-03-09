@@ -4,10 +4,11 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GoldChart = ({ data, days, setDays, heading }) => {
+const GoldChart = ({ data, days, setDays, heading,loading }) => {
+    const safeData = data && typeof data === "object" ? data : {};
     const predictionEntries = heading === "Gold Price Trend"
-        ? Object.entries(data || {}).slice(0, days).reverse()
-        : Object.entries(data || {}).slice(0, days);
+        ? Object.entries(safeData).slice(0, days).reverse()
+        : Object.entries(safeData).slice(0, days);
 
     const labels = predictionEntries.map(([date]) => date);
     const values = predictionEntries.map(([, price]) => price);
@@ -46,13 +47,14 @@ const GoldChart = ({ data, days, setDays, heading }) => {
     };
 
     return (
-        <div className="p-4 rounded-lg shadow-md bg-gray-900 text-white">
+        <div className="p-4 rounded-lg shadow-md bg-gray-900 text-white relative">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">{heading}</h2>
                 <select
                     className="border p-2 rounded bg-gray-800 text-white"
                     value={days}
                     onChange={(e) => setDays(Number(e.target.value))}
+                    disabled={loading}
                 >
                     <option value={7}>Last 7 Days</option>
                     <option value={15}>Last 15 Days</option>
@@ -61,7 +63,14 @@ const GoldChart = ({ data, days, setDays, heading }) => {
                     <option value={90}>Last 90 Days</option>
                 </select>
             </div>
-            <Line data={chartData} options={chartOptions} />
+
+            {loading ? (
+                <div className="absolute inset-0 flex justify-center items-center bg-gray-900 bg-opacity-80">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-yellow-500"></div>
+                </div>
+            ) : (
+                <Line data={chartData} options={chartOptions} />
+            )}
         </div>
     );
 };

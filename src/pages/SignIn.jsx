@@ -9,7 +9,6 @@ import { setUser } from "../store/slices/userSlice";
 import loginImage from "../assets/images/LoginImage.png";
 import eyeIcon from "../assets/icons/eye.svg";
 import eyeSlashIcon from "../assets/icons/eye-slash.svg";
-import googleIcon from "../assets/icons/icons8-google.svg";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -20,14 +19,10 @@ const SignIn = () => {
     const navigate = useNavigate();
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-    const ApiUrl = process.env.NODE_ENV === "production"
-        ? ""
-        : "http://localhost:5000/api";
-
     const handleSignIn = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${ApiUrl}/auth/signin`, { email, password });
+            const response = await axios.post("http://localhost:5000/api/auth/signin", { email, password });
 
             const { token, user } = response.data;
             dispatch(login(token));
@@ -43,46 +38,48 @@ const SignIn = () => {
     if (isAuthenticated) return <Navigate to="/dashboard" />;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
-            <ToastContainer position="top-center" autoClose={5000} hideProgressBar />
+        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+            <ToastContainer position="top-center" autoClose={5000} hideProgressBar theme="dark" />
 
-            <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                {/* Image Section */}
                 <div className="hidden md:block">
-                    <img src={loginImage} alt="Login" className="h-full w-full object-cover" />
+                    <img src={loginImage} alt="Login" className="h-full w-full object-cover opacity-90" />
                 </div>
 
-                <div className="p-10 flex flex-col justify-center">
-                    <h2 className="text-4xl font-bold text-center text-green-600 mb-4">Welcome Back!</h2>
-                    <p className="text-center text-gray-600 mb-8">Log in to continue</p>
+                {/* Login Form */}
+                <div className="p-8 flex flex-col justify-center">
+                    <h2 className="text-3xl font-bold text-center text-yellow-400 mb-4">Welcome Back!</h2>
+                    <p className="text-center text-gray-400 mb-6">Log in to continue</p>
 
                     <form className="space-y-4" onSubmit={handleSignIn}>
                         <div>
-                            <label className="block text-sm font-medium text-green-600">Email</label>
+                            <label className="block text-sm font-medium text-gray-300">Email</label>
                             <input
                                 type="email"
                                 placeholder="john@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-2 mt-1 rounded-md bg-green-100 text-green-800 focus:ring focus:ring-green-400"
+                                className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-green-600">Password</label>
+                            <label className="block text-sm font-medium text-gray-300">Password</label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    placeholder="password"
+                                    placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-2 mt-1 rounded-md bg-green-100 text-green-800 focus:ring focus:ring-green-400"
+                                    className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-3 text-green-800"
+                                    className="absolute right-3 top-3 text-gray-400"
                                 >
                                     <img src={showPassword ? eyeSlashIcon : eyeIcon} alt="Toggle" className="w-5 h-6" />
                                 </button>
@@ -91,17 +88,22 @@ const SignIn = () => {
 
                         <button
                             type="submit"
-                            className="w-full py-2 bg-gradient-to-r from-green-500 to-blue-500 hover:from-blue-500 hover:to-green-500 text-white rounded-md font-bold transition-transform transform hover:scale-105"
+                            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-md font-bold transition-transform transform hover:scale-105"
                         >
                             Sign In
                         </button>
                     </form>
 
                     <p className="text-center text-sm mt-4">
-                        Don’t have an account? <Link to="/signup" className="text-green-500 hover:underline">Sign Up</Link>
+                        Don’t have an account?{" "}
+                        <Link to="/signup" className="text-yellow-400 hover:underline">
+                            Sign Up
+                        </Link>
                     </p>
                     <p className="text-center text-sm mt-2">
-                        <Link to="/forgot-password" className="text-green-500 hover:underline">Forgot Password?</Link>
+                        <Link to="/forgot-password" className="text-yellow-400 hover:underline">
+                            Forgot Password?
+                        </Link>
                     </p>
                 </div>
             </div>
