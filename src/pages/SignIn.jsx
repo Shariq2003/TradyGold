@@ -38,16 +38,14 @@ const SignIn = () => {
     if (isAuthenticated) return <Navigate to="/dashboard" />;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white ">
             <ToastContainer position="top-center" autoClose={5000} hideProgressBar theme="dark" />
 
-            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-                {/* Image Section */}
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-gray-800 shadow-lg rounded-lg overflow-hidden  transition-transform duration-300 hover:scale-105">
                 <div className="hidden md:block">
                     <img src={loginImage} alt="Login" className="h-full w-full object-cover opacity-90" />
                 </div>
 
-                {/* Login Form */}
                 <div className="p-8 flex flex-col justify-center">
                     <h2 className="text-3xl font-bold text-center text-yellow-400 mb-4">Welcome Back!</h2>
                     <p className="text-center text-gray-400 mb-6">Log in to continue</p>
@@ -88,7 +86,7 @@ const SignIn = () => {
 
                         <button
                             type="submit"
-                            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-md font-bold transition-transform transform hover:scale-105"
+                            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-md font-bold"
                         >
                             Sign In
                         </button>
@@ -101,7 +99,7 @@ const SignIn = () => {
                         </Link>
                     </p>
                     <p className="text-center text-sm mt-2">
-                        <Link to="/forgot-password" className="text-yellow-400 hover:underline">
+                        <Link to="/" className="text-yellow-400 hover:underline">
                             Forgot Password?
                         </Link>
                     </p>

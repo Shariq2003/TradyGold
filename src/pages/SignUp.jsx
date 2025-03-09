@@ -15,14 +15,10 @@ const SignUp = () => {
         lastName: "",
         username: "",
         email: "",
-        password: ""
+        password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const ApiUrl = process.env.NODE_ENV === "production"
-        ? ""
-        : "http://localhost:5000/api";
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -31,8 +27,9 @@ const SignUp = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
-            await axios.post(`${ApiUrl}/auth/signup`, formData);
+            await axios.post("http://localhost:5000/api/auth/signup", formData);
             toast.success("Signup successful");
             navigate("/signin");
         } catch (error) {
@@ -43,15 +40,16 @@ const SignUp = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-20 bg-gradient-to-r from-blue-400 to-green-500">
-            <ToastContainer position="top-center" autoClose={5000} hideProgressBar />
-            <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 bg-white shadow-lg rounded-lg overflow-hidden">
-                <div className="p-10 flex flex-col justify-center">
-                    <h2 className="text-4xl font-bold text-center text-blue-600">Join Us Today!</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-6">
+            <ToastContainer position="top-center" autoClose={5000} hideProgressBar theme="dark" />
+
+            <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+                <div className="p-8 flex flex-col justify-center">
+                    <h2 className="text-3xl font-bold text-center text-yellow-400 mb-4">Join Us Today!</h2>
                     <form className="space-y-4" onSubmit={handleSignUp}>
                         {["firstName", "lastName", "username", "email"].map((field) => (
                             <div key={field}>
-                                <label className="block text-sm font-medium text-blue-600" htmlFor={field}>
+                                <label className="block text-sm font-medium text-gray-300" htmlFor={field}>
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </label>
                                 <input
@@ -59,7 +57,7 @@ const SignUp = () => {
                                     id={field}
                                     value={formData[field]}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-2 mt-1 rounded-md bg-blue-100"
+                                    className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
                                     required
                                     disabled={isSubmitting}
                                 />
@@ -67,7 +65,7 @@ const SignUp = () => {
                         ))}
 
                         <div>
-                            <label className="block text-sm font-medium text-blue-600" htmlFor="password">
+                            <label className="block text-sm font-medium text-gray-300" htmlFor="password">
                                 Password
                             </label>
                             <div className="relative">
@@ -76,16 +74,16 @@ const SignUp = () => {
                                     id="password"
                                     value={formData.password}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-2 mt-1 rounded-md bg-blue-100"
+                                    className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
                                     required
                                     disabled={isSubmitting}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-3"
+                                    className="absolute right-3 top-3 text-gray-400"
                                 >
-                                    <img src={showPassword ? eyeSlashIcon : eyeIcon} alt="Show/Hide" className="w-5 h-5" />
+                                    <img src={showPassword ? eyeSlashIcon : eyeIcon} alt="Toggle" className="w-5 h-6" />
                                 </button>
                             </div>
                         </div>
@@ -93,27 +91,22 @@ const SignUp = () => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full py-2 bg-blue-500 text-white rounded-md"
+                            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-md font-bold"
                         >
-                            Sign Up
+                            {isSubmitting ? "Signing Up..." : "Sign Up"}
                         </button>
                     </form>
 
-                    <button
-                        onClick={() => (window.location.href = `${ApiUrl}/auth/google`)}
-                        className="w-full mt-4 py-2 flex items-center justify-center border rounded-md"
-                    >
-                        <img src={googleIcon} alt="Google" className="w-6 h-6 mr-2" />
-                        Sign in with Google
-                    </button>
-
                     <p className="text-center text-sm mt-4">
-                        Already have an account? <a href="/signin" className="text-blue-500">Log In</a>
+                        Already have an account?{" "}
+                        <a href="/signin" className="text-yellow-400 hover:underline">
+                            Log In
+                        </a>
                     </p>
                 </div>
 
                 <div className="hidden md:block">
-                    <img src={signupImage} alt="Signup" className="h-full w-full object-cover" />
+                    <img src={signupImage} alt="Signup" className="h-full w-full object-cover opacity-90" />
                 </div>
             </div>
         </div>
