@@ -122,7 +122,6 @@ export default function Sell() {
                     </form>
                 )}
 
-                {/* Recommended Buttons */}
                 {activeTab === "quantity" ? (
                     <div className="mt-6">
                         <p className="text-gray-400 mb-2">Recommended</p>
@@ -147,7 +146,9 @@ export default function Sell() {
                             {[1000, 5000, 10000, 20000].map((value) => (
                                 <button
                                     key={value}
-                                    onClick={() => setAmount(value)}
+                                    onClick={() => {
+                                        if (value <= availableGold*currentGoldPrice) setAmount(value);
+                                    }}
                                     className="p-3 bg-gray-700 rounded-lg text-gray-300 hover:bg-gray-600 transition"
                                 >
                                     ₹{value}
