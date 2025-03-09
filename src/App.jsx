@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useSelector } from "react-redux";
 import "./App.css";
 
+import Gateway from "./pages/Payment_Gateway/Gateway.jsx";
+import PaymentSuccess from "./pages/Payment_Gateway/PaymentSuccess.jsx";
+import PaymentFailed from "./pages/Payment_Gateway/PaymentFailed.jsx";
+
 import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import SignIn from "./pages/SignIn.jsx";
@@ -21,6 +25,9 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/signin" />} />
+            <Route path="/mock-payment" element={<Gateway />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-failed" element={<PaymentFailed />} />
           </Routes>
         </main>
       </div>

@@ -43,6 +43,7 @@ const Dashboard = () => {
 
     const fetchPriceTrends = async () => {
         setTrendLoading(true);
+        toast.loading("Fetching Trends...", { id: "trends" });
         try {
             const startDate = getDateBeforeXDays(days);
             const endDate = new Date().toISOString().split("T")[0];
@@ -51,8 +52,10 @@ const Dashboard = () => {
 
             const priceTrends = await response.json();
             dispatch(setGoldData({ trend: priceTrends || {} }));
+            toast.success("Trends updated!", { id: "trends" });
         } catch (error) {
             console.error("Error fetching price trends:", error);
+            toast.error("Failed to fetch Trends", { id: "trends" });
         } finally {
             setTrendLoading(false);
         }
@@ -60,14 +63,17 @@ const Dashboard = () => {
 
     const fetchPredictions = async () => {
         setPredictionsLoading(true);
+        toast.loading("Fetching Predictions...", { id: "predictions" });
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/predict/?num_days=${predictionDays}`);
             if (!response.ok) throw new Error("Failed to fetch predictions");
 
             const predictionData = await response.json();
             dispatch(setGoldData({ prediction: predictionData || {} }));
+            toast.success("Predictions updated!", { id: "predictions" });
         } catch (error) {
             console.error("Error fetching predictions:", error);
+            toast.error("Failed to fetch Predictions", { id: "predictions" });
         } finally {
             setPredictionsLoading(false);
         }

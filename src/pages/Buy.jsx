@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function BuyPage() {
     const [activeTab, setActiveTab] = useState("quantity");
     const [quantity, setQuantity] = useState("");
     const [amount, setAmount] = useState("");
+
+    const navigate = useNavigate();
 
     const currentGoldPrice = useSelector((state) => state.gold.livePrice) || 8861;
     const platformChargePercent = 3;
@@ -21,6 +25,19 @@ export default function BuyPage() {
         ? (amount * (1 + platformChargePercent / 100)).toFixed(2)
         : "0.00";
 
+    const handleBuyClick = (e) => {
+        e.preventDefault();
+        if (activeTab === "quantity" && quantity>0) {
+            localStorage.setItem("paymentAmount", totalPayableAmount);
+            navigate("/mock-payment");
+        } else if (activeTab === "amount" && amount>0) {
+            localStorage.setItem("paymentAmount", totalAmountPayable);
+            navigate("/mock-payment");
+        }
+        else{
+            toast.error("Please enter a valid quantity or amount");
+        }
+    };
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6 bg-gray-900 text-white shadow-xl rounded-lg">
             <div className="flex justify-center mb-6 bg-gray-700 p-1 rounded-full">
@@ -75,7 +92,10 @@ export default function BuyPage() {
                             Total Payable Amount: <span className="text-green-400 font-semibold">₹{totalPayableAmount}</span>
                         </p>
 
-                        <button className="w-full bg-blue-500 text-white py-3 rounded-lg shadow-md hover:bg-blue-600 transition">
+                        <button 
+                            className="w-full bg-blue-500 text-white py-3 rounded-lg shadow-md hover:bg-blue-600 transition"
+                            onClick={handleBuyClick}
+                            >
                             Buy Gold
                         </button>
                     </form>
@@ -110,7 +130,10 @@ export default function BuyPage() {
                             Total Payable Amount: <span className="text-green-400 font-semibold">₹{totalAmountPayable}</span>
                         </p>
 
-                        <button className="w-full bg-green-500 text-white py-3 rounded-lg shadow-md hover:bg-green-600 transition">
+                        <button 
+                            className="w-full bg-green-500 text-white py-3 rounded-lg shadow-md hover:bg-green-600 transition"
+                            onClick={handleBuyClick}
+                            >
                             Buy Gold
                         </button>
                     </form>

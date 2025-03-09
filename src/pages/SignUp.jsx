@@ -55,6 +55,7 @@ const SignUp = () => {
                                 <input
                                     type={field === "email" ? "email" : "text"}
                                     id={field}
+                                    placeholder={`Enter your ${field}`}
                                     value={formData[field]}
                                     onChange={handleChange}
                                     className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
@@ -72,6 +73,7 @@ const SignUp = () => {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     id="password"
+                                    placeholder="Enter your password"
                                     value={formData.password}
                                     onChange={handleChange}
                                     className="w-full px-4 py-2 mt-1 rounded-md bg-gray-700 text-white border border-gray-600 focus:ring-yellow-400 focus:border-yellow-400"
