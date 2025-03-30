@@ -48,7 +48,7 @@ const GoldChart = ({ data, days, setDays, heading, loading, disclaimer }) => {
     const dayOptions = [7, 15, 30, 60, 90];
 
     return (
-        <div className="p-4 rounded-lg shadow-md bg-gray-900 text-white relative">
+        <div className="p-4 rounded-lg bg-gray-900 text-white relative">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">{heading}</h2>
                 
@@ -75,9 +75,11 @@ const GoldChart = ({ data, days, setDays, heading, loading, disclaimer }) => {
                 <>
                     <Line data={chartData} options={chartOptions} />
                     {disclaimer && (
-                        <p className="mt-8 text-sm text-yellow-400 italic">
-                            NOTE : {disclaimer}
-                        </p>
+                        <div className="flex justify-center mt-4">
+                            <p className="mt-8 text-sm text-yellow-400 italic w-full max-w-[900px] break-words">
+                                NOTE: {disclaimer}
+                            </p>
+                        </div>
                     )}
                 </>
             )}
