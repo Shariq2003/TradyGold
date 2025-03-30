@@ -11,6 +11,7 @@ import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -20,7 +21,7 @@ function App() {
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" />} />
+            <Route path="/" element={isLoggedIn ? <Home /> : <LandingPage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/home" element={<Home />} />
