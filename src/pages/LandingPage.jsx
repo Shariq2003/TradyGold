@@ -7,6 +7,7 @@ import HowItWorksSection from '../components/Sections/HowItWorksSection';
 import TestimonialsSection from '../components/Sections/TestimonialsSection';
 import CTASection from '../components/Sections/CTASection';
 import Footer from '../components/Footer';
+import NewsTicker from '../components/NewsTicker';
 
 const LandingPage = () => {
     return (
@@ -19,6 +20,7 @@ const LandingPage = () => {
             <TestimonialsSection />
             <CTASection />
             <Footer />
+            <NewsTicker />
         </div>
     );
 };
