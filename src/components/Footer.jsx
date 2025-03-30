@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 function Footer() {
     return (
@@ -29,7 +30,7 @@ function Footer() {
                         <h4 className="text-white text-xl font-semibold mb-4">Follow Us</h4>
                         <div className="flex space-x-4">
                             <a href="/" className="text-yellow-500 hover:text-white"><FaFacebookF size={24} /></a>
-                            <a href="/" className="text-yellow-500 hover:text-white"><FaTwitter size={24} /></a>
+                            <a href="/" className="text-yellow-500 hover:text-white"><FaXTwitter size={24} /></a>
                             <a href="/" className="text-yellow-500 hover:text-white"><FaInstagram size={24} /></a>
                             <a href="/" className="text-yellow-500 hover:text-white"><FaLinkedinIn size={24} /></a>
                         </div>

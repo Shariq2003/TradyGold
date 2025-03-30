@@ -23,22 +23,27 @@ const Dashboard = () => {
     const fetchLivePrices = async () => {
         setLivePriceLoading(true);
         toast.loading("Fetching live gold prices...", { id: "live-price" });
+        // if(goldData.livePrice === 0) {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/live-prices/");
+                if (!response.ok) throw new Error("Failed to fetch live prices");
 
-        try {
-            const response = await fetch("http://127.0.0.1:8000/api/live-prices/");
-            if (!response.ok) throw new Error("Failed to fetch live prices");
+                const priceData = await response.json();
+                dispatch(setGoldData({ livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : "0.0000" }));
+                setGoldTableData(priceData);
 
-            const priceData = await response.json();
-            dispatch(setGoldData({ livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : "0.0000" }));
-            setGoldTableData(priceData);
-
-            toast.success("Live prices updated!", { id: "live-price" });
-        } catch (error) {
-            console.error("Error fetching live prices:", error);
-            toast.error("Failed to fetch live prices", { id: "live-price" });
-        } finally {
-            setLivePriceLoading(false);
-        }
+                toast.success("Live prices updated!", { id: "live-price" });
+            } catch (error) {
+                console.error("Error fetching live prices:", error);
+                toast.error("Failed to fetch live prices", { id: "live-price" });
+            } finally {
+                setLivePriceLoading(false);
+            }
+        // }
+        // else{
+        //     toast.success("Live prices updated!", { id: "live-price" });
+        //     setLivePriceLoading(false);
+        // }
     };
 
     const fetchPriceTrends = async () => {
