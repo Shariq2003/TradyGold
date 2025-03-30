@@ -45,23 +45,26 @@ const GoldChart = ({ data, days, setDays, heading, loading, disclaimer }) => {
             },
         },
     };
+    const dayOptions = [7, 15, 30, 60, 90];
 
     return (
         <div className="p-4 rounded-lg shadow-md bg-gray-900 text-white relative">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">{heading}</h2>
-                <select
-                    className="border p-2 rounded bg-gray-800 text-white"
-                    value={days}
-                    onChange={(e) => setDays(Number(e.target.value))}
-                    disabled={loading}
-                >
-                    <option value={7}>Last 7 Days</option>
-                    <option value={15}>Last 15 Days</option>
-                    <option value={30}>Last 30 Days</option>
-                    <option value={60}>Last 60 Days</option>
-                    <option value={90}>Last 90 Days</option>
-                </select>
+                
+                <div className="flex space-x-2">
+                    {dayOptions.map((option) => (
+                        <button
+                            key={option}
+                            onClick={() => setDays(option)}
+                            disabled={loading}
+                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition 
+                                ${days === option ? 'bg-yellow-500 text-gray-900' : 'bg-gray-700 hover:bg-gray-600'}`}
+                        >
+                            {option} Days
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {loading ? (
