@@ -2,6 +2,7 @@ import React from "react";
 import { FaHome, FaChartBar, FaShoppingCart, FaMoneyBillWave, FaUser, FaSignOutAlt } from "react-icons/fa";
 import {logout} from '../store/slices/authSlice';
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 const Sidebar = ({ activeTab, onTabChange }) => {
     const dispatch = useDispatch();
@@ -14,8 +15,10 @@ const Sidebar = ({ activeTab, onTabChange }) => {
     ];
 
     const handleLogout = () => {
-        console.log("User logged out!");
-        dispatch(logout());
+        toast.success("Logout successful. Redirecting...");
+        setTimeout(() => {
+            dispatch(logout());
+        }, 1000);
     };
 
     return (
@@ -33,7 +36,6 @@ const Sidebar = ({ activeTab, onTabChange }) => {
                         <span className="text-sm mt-2">{tab.name}</span>
                     </li>
                 ))}
-                {/* Logout Button */}
                 <li
                     onClick={handleLogout}
                     className="flex flex-col items-center justify-center w-full h-20 rounded-lg cursor-pointer transition-all duration-300 bg-red-600 hover:bg-red-500 mt-auto"
