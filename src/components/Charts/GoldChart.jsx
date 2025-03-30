@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GoldChart = ({ data, days, setDays, heading,loading }) => {
+const GoldChart = ({ data, days, setDays, heading, loading, disclaimer }) => {
     const safeData = data && typeof data === "object" ? data : {};
     const predictionEntries = heading === "Gold Price Trend"
         ? Object.entries(safeData).slice(0, days).reverse()
@@ -36,12 +36,12 @@ const GoldChart = ({ data, days, setDays, heading,loading }) => {
         },
         scales: {
             x: {
-                ticks: { color: "#fff" }, // White X-axis labels
-                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Light grid lines
+                ticks: { color: "#fff" },
+                grid: { color: "rgba(255, 255, 255, 0.2)" },
             },
             y: {
-                ticks: { color: "#fff" }, // White Y-axis labels
-                grid: { color: "rgba(255, 255, 255, 0.2)" }, // Light grid lines
+                ticks: { color: "#fff" },
+                grid: { color: "rgba(255, 255, 255, 0.2)" },
             },
         },
     };
@@ -69,7 +69,14 @@ const GoldChart = ({ data, days, setDays, heading,loading }) => {
                     <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-yellow-500"></div>
                 </div>
             ) : (
-                <Line data={chartData} options={chartOptions} />
+                <>
+                    <Line data={chartData} options={chartOptions} />
+                    {disclaimer && (
+                        <p className="mt-8 text-sm text-yellow-400 italic">
+                            NOTE : {disclaimer}
+                        </p>
+                    )}
+                </>
             )}
         </div>
     );

@@ -114,8 +114,8 @@ const Dashboard = () => {
             ) : (
                 <GoldTable goldData={goldTableData} />
             )}
-            <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend" loading={trendLoading} />
-            <GoldChart data={goldData.prediction} days={predictionDays} setDays={setPredictionDays} heading="Gold Price Prediction" loading={predictionsLoading} />
+            <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend" loading={trendLoading} disclaimer="The gold price trends displayed are based on historical data and are for informational purposes only. Past performance is not indicative of future results. Please conduct your own research before making any financial decisions."/>
+            <GoldChart data={goldData.prediction} days={predictionDays} setDays={setPredictionDays} heading="Gold Price Prediction" loading={predictionsLoading} disclaimer="The gold price predictions are generated using machine learning models and are subject to uncertainties. They are intended for educational and informational purposes only and should not be solely relied upon for financial decisions. Always consult with a financial advisor before making investments." />
         </div>
     );
 };
