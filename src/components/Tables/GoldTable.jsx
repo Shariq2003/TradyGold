@@ -6,14 +6,14 @@ const GoldTable = ({ goldData }) => {
     }
 
     const goldPrices = [
-        { carat: "24K", price: goldData.price_gram_24k },
-        { carat: "22K", price: goldData.price_gram_22k },
-        { carat: "21K", price: goldData.price_gram_21k },
-        { carat: "20K", price: goldData.price_gram_20k },
-        { carat: "18K", price: goldData.price_gram_18k },
-        { carat: "16K", price: goldData.price_gram_16k },
-        { carat: "14K", price: goldData.price_gram_14k },
-        { carat: "10K", price: goldData.price_gram_10k },
+        { carat: "24K", price: goldData.price / 28.3495 },
+        { carat: "22K", price: (goldData.price / 28.3495) * 0.9167 },
+        // { carat: "21K", price: goldData.price_gram_24k },
+        { carat: "20K", price: (goldData.price / 28.3495) * 0.8333 },
+        { carat: "18K", price: (goldData.price / 28.3495) * 0.75 },
+        { carat: "16K", price: (goldData.price / 28.3495) * 0.6667 },
+        { carat: "14K", price: (goldData.price / 28.3495) * 0.5833 },
+        { carat: "10K", price: (goldData.price / 28.3495) * 0.4167 },
     ];
 
     return (
