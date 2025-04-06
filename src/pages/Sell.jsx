@@ -6,9 +6,11 @@ export default function Sell() {
     const [quantity, setQuantity] = useState("");
     const [amount, setAmount] = useState("");
 
+    const trade = useSelector((state) => state.trade);
+
     const currentGoldPrice = useSelector((state) => state.gold.livePrice) || 0;
     const platformChargePercent = 3;
-    const availableGold = useSelector((state) => state.trade.goldAvailable) || 0;
+    const availableGold = (trade.goldAvailable) || 0;
     const totalReceivableAmount = quantity
         ? (quantity * currentGoldPrice * (1 - platformChargePercent / 100)).toFixed(2)
         : "0.00";
@@ -62,8 +64,17 @@ export default function Sell() {
                                 value={quantity}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    if (value === "" || (Number(value) >= 0 && Number(value) <= availableGold)) setQuantity(value);
+                                    const numericValue = Number(value);
+                                    const maxQuantity = availableGold;
+
+                                    if (
+                                        value === "" ||
+                                        (!isNaN(numericValue) && numericValue >= 0 && numericValue <= maxQuantity)
+                                    ) {
+                                        setQuantity(value);
+                                    }
                                 }}
+
                                 className="w-full p-3 border rounded-lg mt-1 bg-gray-900 text-white focus:ring-2 focus:ring-red-400"
                                 placeholder="Enter grams"
                                 inputMode="decimal"
@@ -77,6 +88,9 @@ export default function Sell() {
                             />
                         </label>
 
+                        <p className="text-gray-400">
+                            Total Gold Available: <span className="text-green-400 font-semibold">{trade.goldAvailable} gm</span>
+                        </p>
                         <p className="text-gray-400">
                             Total Receivable Amount: <span className="text-green-400 font-semibold">₹{totalReceivableAmount}</span>
                         </p>
@@ -93,7 +107,15 @@ export default function Sell() {
                                 value={amount}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    if (value === "" || (Number(value) >= 0 && Number(value) <= availableGold * currentGoldPrice)) setAmount(value);
+                                    const numericValue = Number(value);
+                                    const maxAmount = availableGold * currentGoldPrice;
+
+                                    if (
+                                        value === "" ||
+                                        (!isNaN(numericValue) && numericValue >= 0 && numericValue <= maxAmount)
+                                    ) {
+                                        setAmount(value);
+                                    }
                                 }}
                                 className="w-full p-3 border rounded-lg mt-1 bg-gray-900 text-white focus:ring-2 focus:ring-orange-400"
                                 placeholder="Enter amount"
@@ -109,9 +131,9 @@ export default function Sell() {
                         </label>
 
                         <p className="text-gray-400">
-                            Gold Quantity to Sell: <span className="text-blue-400 font-semibold">{goldQuantityByAmount} gm</span>
+                                Amount of Available Gold: <span className="text-blue-400 font-semibold">{(currentGoldPrice * trade.goldAvailable) - (currentGoldPrice * trade.goldAvailable * platformChargePercent/100)} gm</span>
                         </p>
-
+                        
                         <p className="text-gray-400">
                             Total Receivable Amount: <span className="text-green-400 font-semibold">₹{totalAmountReceivable}</span>
                         </p>

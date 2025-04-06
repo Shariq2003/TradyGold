@@ -9,6 +9,7 @@ export default function BuyPage() {
     const [amount, setAmount] = useState("");
 
     const navigate = useNavigate();
+    const trade = useSelector((state) => state.trade);
 
     const currentGoldPrice = useSelector((state) => state.gold.livePrice) || 8861;
     const platformChargePercent = 3;
@@ -77,7 +78,7 @@ export default function BuyPage() {
                                 value={quantity}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    if (value === "" || Number(value) >= 0) setQuantity(value);
+                                    if (value === "" || (Number(value) >= 0 && Number(value) <= (trade.balance / (currentGoldPrice + platformChargePercent)))) setQuantity(value);
                                 }}
                                 className="w-full p-3 border rounded-lg mt-1 bg-gray-900 text-white focus:ring-2 focus:ring-blue-400"
                                 placeholder="Enter grams"
@@ -95,6 +96,9 @@ export default function BuyPage() {
                         <p className="text-gray-400">
                             Total Payable Amount: <span className="text-green-400 font-semibold">₹{totalPayableAmount}</span>
                         </p>
+                        <p className="text-gray-400">
+                            Wallet Balance: <span className="text-green-400 font-semibold">₹{trade.balance}</span>
+                        </p>
 
                         <button 
                             className="w-full bg-blue-500 text-white py-3 rounded-lg shadow-md hover:bg-blue-600 transition"
@@ -111,7 +115,7 @@ export default function BuyPage() {
                                 value={amount}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    if (value === "" || Number(value) >= 0) setAmount(value);
+                                    if (value === "" || (Number(value) >= 0 && Number(value) <= trade.balance)) setAmount(value);
                                 }}
                                 className="w-full p-3 border rounded-lg mt-1 bg-gray-900 text-white focus:ring-2 focus:ring-green-400"
                                 placeholder="Enter amount"
@@ -132,6 +136,9 @@ export default function BuyPage() {
 
                         <p className="text-gray-400">
                             Total Payable Amount: <span className="text-green-400 font-semibold">₹{totalAmountPayable}</span>
+                        </p>
+                        <p className="text-gray-400">
+                            Wallet Balance: <span className="text-green-400 font-semibold">₹{trade.balance}</span>
                         </p>
 
                         <button 
