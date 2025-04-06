@@ -25,7 +25,7 @@ const SignIn = () => {
             const response = await axios.post("http://localhost:5000/api/auth/signin", { email, password });
 
             const { token, user } = response.data;
-            dispatch(login(token));
+            dispatch(login({ token, userId: user._id }));
             dispatch(setUser(user));
 
             toast.success("Login successful");

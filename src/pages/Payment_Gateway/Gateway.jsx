@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCreditCard, FaUniversity, FaWallet, FaQrcode } from "react-icons/fa";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function PaymentGateway() {
     const [selectedMethod, setSelectedMethod] = useState("upi");
@@ -15,24 +17,50 @@ export default function PaymentGateway() {
         wallet: "",
     });
     const navigate = useNavigate();
-
-    const handlePayment = (status) => {
+    const user = useSelector((state) => state.user);
+    const auth = useSelector((state) => state.auth);
+    const handlePayment = async (status) => {
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             if (status === "success") {
                 const transactionData = {
                     orderId: `TRX-${Date.now()}`,
                     amount: localStorage.getItem("paymentAmount"),
+                    quantity: localStorage.getItem("goldQuantity"),
                     status: "success",
                     timestamp: new Date().toISOString(),
                 };
+
                 localStorage.setItem("mockTransaction", JSON.stringify(transactionData));
+
+                try {
+                    await axios.post(
+                        "http://localhost:5000/api/trade/buy",
+                        {
+                            userId: user.userId,
+                            orderId: transactionData.orderId,
+                            amount: parseFloat(transactionData.amount),
+                            quantity: parseFloat(transactionData.quantity),
+                            timestamp: transactionData.timestamp,
+                        },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${auth.token}`,
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+                } catch (err) {
+                    console.error("Failed to save trade:", err);
+                }
+
                 navigate("/payment-success");
             } else {
                 navigate("/payment-failed");
             }
         }, 2000);
     };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900">

@@ -7,18 +7,23 @@ import GoldTable from "../components/Tables/GoldTable";
 import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoneyBill } from "react-icons/fa";
 import { getDateBeforeXDays } from "../utils/days";
 import toast from "react-hot-toast";
+import useFetchTradeData from "../hooks/useFetchTradeData";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
     const goldData = useSelector((state) => state.gold);
     const tradeData = useSelector((state) => state.trade);
     const userData = useSelector((state) => state.user);
+    const auth = useSelector((state) => state.auth);
+
     const [days, setDays] = useState(7);
     const [predictionDays, setPredictionDays] = useState(7);
     const [trendLoading, setTrendLoading] = useState(true);
     const [predictionsLoading, setPredictionsLoading] = useState(true);
     const [livePriceLoading, setLivePriceLoading] = useState(true);
     const [goldTableData, setGoldTableData] = useState({});
+
+    const fetchTradeData = useFetchTradeData();
 
     const fetchLivePrices = async () => {
         setLivePriceLoading(true);
@@ -29,7 +34,7 @@ const Dashboard = () => {
                 if (!response.ok) throw new Error("Failed to fetch live prices");
 
                 const priceData = await response.json();
-                dispatch(setGoldData({ livePrice: priceData.price ? (priceData.price / 28.3495).toFixed(4) : "0.0000" }));
+                dispatch(setGoldData({ livePrice: priceData.price ? Number(priceData.price / 28.3495).toFixed(4) : "0.0000" }));
                 setGoldTableData(priceData);
 
                 toast.success("Live prices updated!", { id: "live-price" });
@@ -98,14 +103,66 @@ const Dashboard = () => {
         fetchPredictions();
     }, [predictionDays]);
 
+    useEffect(() => {
+        fetchTradeData(auth.token);
+    },[]);
+
     const cardsData = [
-        { title: "Current Gold Value", icon: <FaCoins className="text-yellow-400" />, value: livePriceLoading ? "Loading..." : `₹${goldData.livePrice}/g`, color: "bg-gray-800 border border-yellow-500 shadow-lg" },
-        { title: "Gold Available", icon: <FaBalanceScale className="text-green-400" />, value: tradeData?.goldAvailable ? `${tradeData.goldAvailable}g` : "N/A", color: "bg-gray-800 border border-green-500 shadow-lg" },
-        { title: "Portfolio (P/L)", icon: <FaChartLine className="text-purple-400" />, value: tradeData?.portfolio ? `₹${tradeData.portfolio}` : "N/A", color: "bg-gray-800 border border-purple-500 shadow-lg" },
-        { title: "Gold Bought", icon: <FaShoppingCart className="text-yellow-400" />, value: tradeData?.goldBought ? `₹${tradeData.goldBought}` : "N/A", color: "bg-gray-800 border border-yellow-500 shadow-lg" },
-        { title: "Gold Sold", icon: <FaMoneyBill className="text-red-400" />, value: tradeData?.goldSold ? `₹${tradeData.goldSold}` : "N/A", color: "bg-gray-800 border border-red-500 shadow-lg" },
-        { title: "Wallet Balance", icon: <FaWallet className="text-blue-400" />, value: userData?.balance ? `₹${userData.balance}` : "N/A", color: "bg-gray-800 border border-blue-500 shadow-lg" },
+        {
+            title: "Current Gold Value",
+            icon: <FaCoins className="text-yellow-400" />,
+            value: livePriceLoading
+                ? "Loading..."
+                : `₹${Number(goldData.livePrice).toFixed(4)}/g`,
+            color: "bg-gray-800 border border-yellow-500 shadow-lg",
+        },
+        {
+            title: "Gold Available",
+            icon: <FaBalanceScale className="text-green-400" />,
+            value:
+                tradeData?.goldAvailable != null && !isNaN(Number(tradeData.goldAvailable))
+                    ? `${Number(tradeData.goldAvailable).toFixed(4)}g`
+                    : "N/A",
+            color: "bg-gray-800 border border-green-500 shadow-lg",
+        },
+        {
+            title: "Portfolio (P/L)",
+            icon: <FaChartLine className="text-purple-400" />,
+            value:
+                tradeData?.portfolio != null && !isNaN(Number(tradeData.portfolio))
+                    ? `₹${Number(tradeData.portfolio).toFixed(4)}`
+                    : "N/A",
+            color: "bg-gray-800 border border-purple-500 shadow-lg",
+        },
+        {
+            title: "Gold Bought",
+            icon: <FaShoppingCart className="text-yellow-400" />,
+            value:
+                tradeData?.goldBought != null && !isNaN(Number(tradeData.goldBought))
+                    ? `₹${Number(tradeData.goldBought).toFixed(4)}`
+                    : "N/A",
+            color: "bg-gray-800 border border-yellow-500 shadow-lg",
+        },
+        {
+            title: "Gold Sold",
+            icon: <FaMoneyBill className="text-red-400" />,
+            value:
+                tradeData?.goldSold != null && !isNaN(Number(tradeData.goldSold))
+                    ? `₹${Number(tradeData.goldSold).toFixed(4)}`
+                    : "N/A",
+            color: "bg-gray-800 border border-red-500 shadow-lg",
+        },
+        {
+            title: "Wallet Balance",
+            icon: <FaWallet className="text-blue-400" />,
+            value:
+                userData?.balance != null && !isNaN(Number(userData.balance))
+                    ? `₹${Number(tradeData.balance).toFixed(4)}`
+                    : "N/A",
+            color: "bg-gray-800 border border-blue-500 shadow-lg",
+        },
     ];
+
 
     return (
         <div className="w-full p-6 space-y-6 bg-gray-900 text-gray-200 min-h-screen">

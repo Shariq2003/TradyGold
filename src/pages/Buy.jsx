@@ -27,11 +27,15 @@ export default function BuyPage() {
 
     const handleBuyClick = (e) => {
         e.preventDefault();
-        if (activeTab === "quantity" && quantity>0) {
+        if (activeTab === "quantity" && quantity > 0) {
             localStorage.setItem("paymentAmount", totalPayableAmount);
+            localStorage.setItem("goldQuantity", quantity);
+            localStorage.setItem("goldBuyType", "quantity");
             navigate("/mock-payment");
-        } else if (activeTab === "amount" && amount>0) {
+        } else if (activeTab === "amount" && amount > 0) {
             localStorage.setItem("paymentAmount", totalAmountPayable);
+            localStorage.setItem("goldQuantity", goldQuantityByAmount); // calculated quantity
+            localStorage.setItem("goldBuyType", "amount");
             navigate("/mock-payment");
         }
         else{

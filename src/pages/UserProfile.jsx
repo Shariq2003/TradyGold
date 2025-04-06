@@ -1,20 +1,63 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaEnvelope, FaWallet, FaUserEdit, FaCoins, FaShoppingCart, FaMoneyBill } from "react-icons/fa";
 import UserProfileImg from "../assets/images/UserProfile.png";
+import useFetchTradeData from "../hooks/useFetchTradeData";
 
 const UserProfile = () => {
     const user = useSelector((state) => state.user);
+    const auth = useSelector((state) => state.auth);
+    
     const tradeData = useSelector((state) => state.trade);
-
+    
     const profileImage = user.profilePic ? user.profilePic : UserProfileImg;
+    
+    const fetchTradeData = useFetchTradeData();
 
     const cardsData = [
-        { title: "Gold Owned", icon: <FaCoins className="text-yellow-400" />, value: `${tradeData?.goldAvailable || 0}g`, color: "border-yellow-500" },
-        { title: "Total Gold Bought", icon: <FaShoppingCart className="text-green-400" />, value: `₹${tradeData?.goldBought || 0}`, color: "border-green-500" },
-        { title: "Total Gold Sold", icon: <FaMoneyBill className="text-red-400" />, value: `₹${tradeData?.goldSold || 0}`, color: "border-red-500" },
-        { title: "Wallet Balance", icon: <FaWallet className="text-blue-400" />, value: `₹${user?.balance || 0}`, color: "border-blue-500" },
+        {
+            title: "Gold Owned",
+            icon: <FaCoins className="text-yellow-400" />,
+            value:
+                tradeData?.goldAvailable != null && !isNaN(Number(tradeData.goldAvailable))
+                    ? `${Number(tradeData.goldAvailable).toFixed(4)}g`
+                    : "NA",
+            color: "border-yellow-500",
+        },
+        {
+            title: "Total Gold Bought",
+            icon: <FaShoppingCart className="text-green-400" />,
+            value:
+                tradeData?.goldBought != null && !isNaN(Number(tradeData.goldBought))
+                    ? `₹${Number(tradeData.goldBought).toFixed(4)}`
+                    : "NA",
+            color: "border-green-500",
+        },
+        {
+            title: "Total Gold Sold",
+            icon: <FaMoneyBill className="text-red-400" />,
+            value:
+                tradeData?.goldSold != null && !isNaN(Number(tradeData.goldSold))
+                    ? `₹${Number(tradeData.goldSold).toFixed(4)}`
+                    : "NA",
+            color: "border-red-500",
+        },
+        {
+            title: "Wallet Balance",
+            icon: <FaWallet className="text-blue-400" />,
+            value:
+                tradeData?.balance != null && !isNaN(Number(tradeData.balance))
+                    ? `₹${Number(tradeData.balance).toFixed(4)}`
+                    : "NA",
+            color: "border-blue-500",
+        },
     ];
+
+    useEffect(() => {
+        if (auth.token && user?.userId) {
+            fetchTradeData(auth.token);
+        }
+    }, [auth.token, user.userId, fetchTradeData]);
 
     return (
         <div className="max-w-lg mx-auto bg-gray-900 text-white shadow-xl rounded-lg p-8 border border-gray-700 flex flex-col items-center space-y-6">

@@ -5,6 +5,7 @@ const initialState = {
     portfolio: "0",
     goldBought: "0",
     goldSold: "0",
+    balance: "0",
 };
 
 const tradeSlice = createSlice({
@@ -23,8 +24,11 @@ const tradeSlice = createSlice({
         updateGoldSold: (state, action) => {
             state.goldSold = action.payload;
         },
+        updateBalance: (state, action) => {
+            state.balance = action.payload;
+        },
     },
 });
 
-export const { updateGoldAvailable, updatePortfolio, updateGoldBought, updateGoldSold } = tradeSlice.actions;
+export const { updateGoldAvailable, updatePortfolio, updateGoldBought, updateGoldSold, updateBalance } = tradeSlice.actions;
 export default tradeSlice.reducer;
