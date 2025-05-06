@@ -7,15 +7,15 @@ import { useSelector } from "react-redux";
 export default function PaymentGateway() {
     const [selectedMethod, setSelectedMethod] = useState("upi");
     const [loading, setLoading] = useState(false);
-    const [paymentDetails, setPaymentDetails] = useState({
-        upiId: "",
-        cardNumber: "",
-        expiry: "",
-        cvv: "",
-        cardHolder: "",
-        bank: "",
-        wallet: "",
-    });
+    // const [paymentDetails, setPaymentDetails] = useState({
+    //     upiId: "",
+    //     cardNumber: "",
+    //     expiry: "",
+    //     cvv: "",
+    //     cardHolder: "",
+    //     bank: "",
+    //     wallet: "",
+    // });
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
     const auth = useSelector((state) => state.auth);

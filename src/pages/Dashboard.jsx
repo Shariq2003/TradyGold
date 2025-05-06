@@ -139,7 +139,7 @@ const Dashboard = () => {
             icon: <FaShoppingCart className="text-yellow-400" />,
             value:
                 tradeData?.goldBought != null && !isNaN(Number(tradeData.goldBought))
-                    ? `₹${Number(tradeData.goldBought).toFixed(4)}`
+                    ? `${Number(tradeData.goldBought).toFixed(4)}g`
                     : "N/A",
             color: "bg-gray-800 border border-yellow-500 shadow-lg",
         },
@@ -148,7 +148,7 @@ const Dashboard = () => {
             icon: <FaMoneyBill className="text-red-400" />,
             value:
                 tradeData?.goldSold != null && !isNaN(Number(tradeData.goldSold))
-                    ? `₹${Number(tradeData.goldSold).toFixed(4)}`
+                    ? `${Number(tradeData.goldSold).toFixed(4)}g`
                     : "N/A",
             color: "bg-gray-800 border border-red-500 shadow-lg",
         },

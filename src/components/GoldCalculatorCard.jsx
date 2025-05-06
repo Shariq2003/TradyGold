@@ -47,7 +47,7 @@ const GoldCalculatorCard = () => {
                 "paymentAmount",
                 activeTab === "quantity" ? totalPayableAmount : totalAmountPayable
             );
-            navigate("/mock-payment");
+            navigate("/signin");
         } else {
             toast.error("Please enter a valid quantity or amount");
         }

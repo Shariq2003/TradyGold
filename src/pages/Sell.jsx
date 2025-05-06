@@ -15,9 +15,9 @@ export default function Sell() {
         ? (quantity * currentGoldPrice * (1 - platformChargePercent / 100)).toFixed(2)
         : "0.00";
 
-    const goldQuantityByAmount = amount
-        ? (amount / (currentGoldPrice * (1 - platformChargePercent / 100))).toFixed(4)
-        : "0.0000";
+    // const goldQuantityByAmount = amount
+    //     ? (amount / (currentGoldPrice * (1 - platformChargePercent / 100))).toFixed(4)
+    //     : "0.0000";
 
     const totalAmountReceivable = amount
         ? (amount * (1 - platformChargePercent / 100)).toFixed(2)
