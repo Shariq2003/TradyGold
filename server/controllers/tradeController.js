@@ -3,9 +3,21 @@ const User = require("../models/User");
 
 const getTradeData = async (req, res) => {
     try {
-        const trade = await Trade.findOne({ userId: req.user._id });
+        let trade = await Trade.findOne({ userId: req.user._id });
         const user = await User.findById(req.user._id);
-        if (!trade) return res.status(404).json({ message: "Trade data not found" });
+        if (!trade) {
+            trade = await Trade.create({
+                userId: req.user._id,
+                goldAvailable: 0,
+                goldBought: 0,
+                goldSold: 0,
+                portfolio: 0,
+            });
+            if (user.balance === undefined || user.balance === null) {
+                user.balance = 100;
+                await user.save();
+            }
+        }
 
         const tradeWithBalance = trade.toObject();
         tradeWithBalance.balance = user.balance;
@@ -45,9 +57,14 @@ const buyGold = async (req, res) => {
 };
 
 const sellGold = async (req, res) => {
-    const { quantity, amount } = req.body;
-
     try {
+        const quantity = parseFloat(req.body.quantity ?? 0);
+        const amount = parseFloat(req.body.amount ?? 0);
+
+        if (isNaN(quantity) || isNaN(amount)) {
+            return res.status(400).json({ message: "Invalid quantity or amount" });
+        }
+
         const user = await User.findById(req.user._id);
         const trade = await Trade.findOne({ userId: req.user._id });
 
@@ -69,6 +86,7 @@ const sellGold = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 module.exports = {
     getTradeData,

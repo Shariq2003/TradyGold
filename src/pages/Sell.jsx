@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Sell() {
     const [activeTab, setActiveTab] = useState("quantity");
@@ -7,6 +9,8 @@ export default function Sell() {
     const [amount, setAmount] = useState("");
 
     const trade = useSelector((state) => state.trade);
+    const token = useSelector((state) => state.auth.token);
+
 
     const currentGoldPrice = useSelector((state) => state.gold.livePrice) || 0;
     const platformChargePercent = 3;
@@ -22,6 +26,38 @@ export default function Sell() {
     const totalAmountReceivable = amount
         ? (amount * (1 - platformChargePercent / 100)).toFixed(2)
         : "0.00";
+    const navigate = useNavigate();
+
+    const handleSell = async ({ quantity = 0, amount = 0 }) => {
+        try {
+            const sellData = {
+                quantity: parseFloat(quantity) || 0,
+                amount: parseFloat(amount) || 0,
+            };
+
+            const response = await axios.post(
+                "http://localhost:5000/api/trade/sell",
+                sellData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            localStorage.setItem("mockTransaction", JSON.stringify({
+                orderId: response.data.transactionId || `SELL-${Date.now()}`,
+                amount: response.data.amount || amount,
+                status: "SUCCESS",
+                timestamp: new Date(),
+            }));
+
+            navigate("/payment-success");
+        } catch (error) {
+            console.error("Sell error:", error);
+            navigate("/payment-failed");
+        }
+    };
 
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6 bg-gray-900 text-white shadow-xl rounded-lg">
@@ -57,7 +93,15 @@ export default function Sell() {
                 </div>
 
                 {activeTab === "quantity" ? (
-                    <form className="space-y-4 mt-4">
+                    <form
+                        className="space-y-4 mt-4"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!quantity) return;
+                            const total = (quantity * currentGoldPrice * (1 - platformChargePercent / 100)).toFixed(2);
+                            handleSell({ type: "quantity", quantity: parseFloat(quantity), amount: parseFloat(total) });
+                        }}
+                    >
                         <label className="block text-gray-300 font-semibold">
                             Enter Gold Quantity (grams)
                             <input
@@ -100,7 +144,15 @@ export default function Sell() {
                         </button>
                     </form>
                 ) : (
-                    <form className="space-y-4 mt-4">
+                        <form
+                            className="space-y-4 mt-4"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (!amount) return;
+                                const receivable = (amount * (1 - platformChargePercent / 100)).toFixed(2);
+                                handleSell({ type: "amount", amount: parseFloat(amount), quantity: parseFloat((amount / currentGoldPrice).toFixed(4)) });
+                            }}
+                        >
                         <label className="block text-gray-300 font-semibold">
                             Enter Amount (INR)
                             <input
