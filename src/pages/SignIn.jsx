@@ -99,7 +99,7 @@ const SignIn = () => {
                         </Link>
                     </p>
                     <p className="text-center text-sm mt-2">
-                        <Link to="/" className="text-yellow-400 hover:underline">
+                        <Link to="/forgot-password" className="text-yellow-400 hover:underline">
                             Forgot Password?
                         </Link>
                     </p>
