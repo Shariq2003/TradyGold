@@ -67,9 +67,9 @@ const UserProfile = () => {
                     alt="Profile"
                     className="w-full h-full rounded-full border-4 border-yellow-500 shadow-md object-cover"
                 />
-                <button className="absolute bottom-0 right-2 bg-yellow-500 text-gray-900 p-2 rounded-full shadow-md hover:bg-yellow-600">
+                {/* <button className="absolute bottom-0 right-2 bg-yellow-500 text-gray-900 p-2 rounded-full shadow-md hover:bg-yellow-600">
                     <FaUserEdit />
-                </button>
+                </button> */}
             </div>
             <div className="text-center">
                 <h2 className="text-2xl font-bold">{user.username || "User Name"}</h2>

@@ -8,6 +8,7 @@ import { FaCoins, FaBalanceScale, FaShoppingCart, FaWallet, FaChartLine, FaMoney
 import { getDateBeforeXDays } from "../utils/days";
 import toast from "react-hot-toast";
 import useFetchTradeData from "../hooks/useFetchTradeData";
+import UserProfileImg from "../assets/images/UserProfile.png";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const Dashboard = () => {
     const tradeData = useSelector((state) => state.trade);
     const userData = useSelector((state) => state.user);
     const auth = useSelector((state) => state.auth);
+    const profileImage = userData.profilePic ? userData.profilePic : UserProfileImg;
 
     const [days, setDays] = useState(7);
     const [predictionDays, setPredictionDays] = useState(7);
@@ -109,7 +111,7 @@ const Dashboard = () => {
 
     const cardsData = [
         {
-            title: "Current Gold Value",
+            title: "Current Digital Gold Value",
             icon: <FaCoins className="text-yellow-400" />,
             value: livePriceLoading
                 ? "Loading..."
@@ -117,7 +119,7 @@ const Dashboard = () => {
             color: "bg-gray-800 border border-yellow-500 shadow-lg",
         },
         {
-            title: "Gold Available",
+            title: "My Gold",
             icon: <FaBalanceScale className="text-green-400" />,
             value:
                 tradeData?.goldAvailable != null && !isNaN(Number(tradeData.goldAvailable))
@@ -125,14 +127,24 @@ const Dashboard = () => {
                     : "N/A",
             color: "bg-gray-800 border border-green-500 shadow-lg",
         },
+        // {
+        //    title: `Welcome ${userData.username}`,
+
+        //     src:profileImage,
+        //     value:
+        //         tradeData?.portfolio != null && !isNaN(Number(tradeData.portfolio))
+        //             ? `₹${Number(tradeData.portfolio).toFixed(4)}`
+        //             : "N/A",
+        //     color: "bg-gray-800 border border-purple-500 shadow-lg",
+        // },
         {
-            title: "Portfolio (P/L)",
-            icon: <FaChartLine className="text-purple-400" />,
+            title: "Wallet Balance",
+            icon: <FaWallet className="text-blue-400" />,
             value:
-                tradeData?.portfolio != null && !isNaN(Number(tradeData.portfolio))
-                    ? `₹${Number(tradeData.portfolio).toFixed(4)}`
+                userData?.balance != null && !isNaN(Number(userData.balance))
+                    ? `₹${Number(tradeData.balance).toFixed(4)}`
                     : "N/A",
-            color: "bg-gray-800 border border-purple-500 shadow-lg",
+            color: "bg-gray-800 border border-blue-500 shadow-lg",
         },
         {
             title: "Gold Bought",
@@ -152,23 +164,31 @@ const Dashboard = () => {
                     : "N/A",
             color: "bg-gray-800 border border-red-500 shadow-lg",
         },
-        {
-            title: "Wallet Balance",
-            icon: <FaWallet className="text-blue-400" />,
-            value:
-                userData?.balance != null && !isNaN(Number(userData.balance))
-                    ? `₹${Number(tradeData.balance).toFixed(4)}`
-                    : "N/A",
-            color: "bg-gray-800 border border-blue-500 shadow-lg",
-        },
     ];
 
 
     return (
         <div className="w-full p-6 space-y-6 bg-gray-900 text-gray-200 min-h-screen">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {cardsData.map((card, index) => (
-                    <DashboardCard key={index} title={card.title} icon={card.icon} value={card.value} color={card.color} />
+            <div className="grid gap-6 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {cardsData.slice(0, 3).map((card, index) => (
+                    <DashboardCard
+                        key={index}
+                        title={card.title}
+                        icon={card.icon}
+                        value={card.value}
+                        color={card.color}
+                    />
+                ))}
+            </div>
+            <div className="grid gap-6 mb-6 grid-cols-1 lg:grid-cols-2">
+                {cardsData.slice(3).map((card, index) => (
+                    <DashboardCard
+                        key={index + 3}
+                        title={card.title}
+                        icon={card.icon}
+                        value={card.value}
+                        color={card.color}
+                    />
                 ))}
             </div>
             {livePriceLoading ? (
@@ -176,7 +196,7 @@ const Dashboard = () => {
             ) : (
                 <GoldTable goldData={goldTableData} />
             )}
-            <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend" loading={trendLoading} disclaimer="The gold price trends displayed are based on historical data and are for informational purposes only. Past performance is not indicative of future results. Please conduct your own research before making any financial decisions."/>
+            <GoldChart data={goldData.trend} days={days} setDays={setDays} heading="Gold Price Trend" loading={trendLoading} disclaimer=""/>
             <GoldChart data={goldData.prediction} days={predictionDays} setDays={setPredictionDays} heading="Gold Price Prediction" loading={predictionsLoading} disclaimer="The gold price predictions are generated using machine learning models and are subject to uncertainties. They are intended for educational and informational purposes only and should not be solely relied upon for financial decisions. Always consult with a financial advisor before making investments." />
         </div>
     );
