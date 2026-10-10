@@ -2,16 +2,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IoMdClose } from "react-icons/io";
 
+// newsdata.io key comes from the environment (see .env.example) instead of being committed.
+const NEWS_API_KEY = process.env.REACT_APP_NEWSDATA_API_KEY;
+const NEWS_QUERY = "Gold prices in india";
+const API_URL = `https://newsdata.io/api/1/latest?apikey=${NEWS_API_KEY}&qInTitle=${encodeURIComponent(NEWS_QUERY)}`;
+
 const NewsTicker = () => {
     const [news, setNews] = useState([]);
     const [visibleNews, setVisibleNews] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const API_URL =
-        "https://newsdata.io/api/1/latest?apikey=pub_745575c3821368af2b1d436cf9332d0aae025&qInTitle=Gold%20prices%20in%20india";
-
     useEffect(() => {
         const fetchNews = async () => {
+            if (!NEWS_API_KEY) {
+                console.warn("REACT_APP_NEWSDATA_API_KEY is not set — skipping the news ticker.");
+                setLoading(false);
+                return;
+            }
             try {
                 const response = await axios.get(API_URL);
                 const articles = response.data.results || [];
